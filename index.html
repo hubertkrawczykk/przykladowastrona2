@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Barber Kraków - Strzyżenie męskie i broda</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg-secondary: #111111;
+            --fg: #ffffff;
+            --fg-muted: #a0a0a0;
+            --gold: #c9a227;
+            --gold-light: #e0c05f;
+            --gold-dark: #9a7b1c;
+            --card: #161616;
+            --border: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            color: var(--fg);
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 4px;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 0;
+            transition: all 0.4s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-link {
+            position: relative;
+            color: var(--fg);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.4);
+            transform: scale(1.1);
+            transition: transform 10s ease;
+        }
+
+        .hero:hover .hero-bg {
+            transform: scale(1);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, 
+                rgba(10, 10, 10, 0.7) 0%, 
+                rgba(10, 10, 10, 0.3) 50%,
+                rgba(10, 10, 10, 0.9) 100%);
+        }
+
+        .hero-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a227' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .demo-banner {
+            position: absolute;
+            top: 100px;
+            right: -50px;
+            background: var(--gold);
+            color: var(--bg);
+            padding: 0.5rem 4rem;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            transform: rotate(45deg);
+            box-shadow: 0 4px 20px rgba(201, 162, 39, 0.4);
+            z-index: 100;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 0 1.5rem;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero-title span {
+            color: var(--gold);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: var(--fg-muted);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 3rem;
+            background: var(--gold);
+            color: var(--bg);
+            font-weight: 600;
+            font-size: 0.875rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+
+        .hero-cta:hover {
+            background: var(--gold-light);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(201, 162, 39, 0.4);
+        }
+
+        .hero-cta svg {
+            transition: transform 0.3s ease;
+        }
+
+        .hero-cta:hover svg {
+            transform: translateX(5px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--fg-muted);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 1s ease 1s forwards;
+        }
+
+        .scroll-indicator .line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollLine 2s ease infinite;
+        }
+
+        @keyframes scrollLine {
+            0%, 100% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            51% { transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Sections */
+        .section {
+            padding: 7rem 1.5rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 2px;
+            background: var(--gold);
+            margin: 0 auto;
+        }
+
+        /* About */
+        .about-section {
+            background: var(--bg-secondary);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 1024px) {
+            .about-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .about-image {
+            position: relative;
+            aspect-ratio: 4/5;
+            overflow: hidden;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--gold);
+            transform: translate(20px, 20px);
+            z-index: -1;
+        }
+
+        .about-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p {
+            color: var(--fg-muted);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .about-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .about-feature-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .about-feature h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .about-feature p {
+            font-size: 0.875rem;
+            color: var(--fg-muted);
+            margin: 0;
+        }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            margin-bottom: 1.5rem;
+            color: var(--bg);
+        }
+
+        .service-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        .service-card:hover h3 {
+            color: var(--gold);
+        }
+
+        .service-card p {
+            color: var(--fg-muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        /* Pricing */
+        .pricing-section {
+            background: var(--bg-secondary);
+        }
+
+        .pricing-table {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid var(--border);
+        }
+
+        .pricing-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .pricing-row:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-row:hover {
+            background: var(--card);
+        }
+
+        .pricing-row:hover .price {
+            color: var(--gold);
+        }
+
+        .service-name {
+            font-weight: 500;
+        }
+
+        .service-name span {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            font-weight: 400;
+            margin-top: 0.25rem;
+        }
+
+        .price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .gallery-item:nth-child(1) {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(201, 162, 39, 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            background: rgba(10, 10, 10, 0.7);
+        }
+
+        .gallery-overlay svg {
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gold);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            transform: rotate(90deg);
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            background: var(--bg-secondary);
+            overflow: hidden;
+        }
+
+        .testimonials-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonials-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .testimonial {
+            min-width: 100%;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        .testimonial-content {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            position: relative;
+        }
+
+        .testimonial-content::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 2rem;
+            font-size: 6rem;
+            color: var(--gold);
+            opacity: 0.2;
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
+        }
+
+        .testimonial p {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--fg-muted);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+        }
+
+        .testimonial-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-stars {
+            color: var(--gold);
+            font-size: 0.875rem;
+            letter-spacing: 2px;
+        }
+
+        .testimonials-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .testimonial-dot {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--gold);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-dot.active {
+            background: var(--gold);
+        }
+
+        /* Team */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            text-align: center;
+        }
+
+        .team-image {
+            position: relative;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .team-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: all 0.5s ease;
+        }
+
+        .team-card:hover .team-image img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .team-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--gold);
+            opacity: 0;
+            transform: translate(10px, 10px);
+            transition: all 0.4s ease;
+        }
+
+        .team-card:hover .team-image::after {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        .team-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-card .role {
+            color: var(--gold);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .team-card p {
+            color: var(--fg-muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* Booking */
+        .booking-section {
+            background: var(--bg-secondary);
+        }
+
+        .booking-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .booking-form {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--fg-muted);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--fg);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23c9a227' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--gold);
+            color: var(--bg);
+            font-weight: 600;
+            font-size: 0.875rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--gold-light);
+            box-shadow: 0 10px 30px rgba(201, 162, 39, 0.3);
+        }
+
+        /* Contact */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .contact-info-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .contact-info-item h4 {
+            font-size: 0.875rem;
+            color: var(--fg-muted);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .contact-info-item p {
+            font-size: 1.125rem;
+        }
+
+        .contact-info-item a {
+            color: var(--fg);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info-item a:hover {
+            color: var(--gold);
+        }
+
+        .hours-list {
+            margin-top: 0.5rem;
+        }
+
+        .hours-list p {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Map */
+        .map-container {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            filter: grayscale(100%) invert(92%) contrast(83%);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 4rem 1.5rem 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo span {
+            color: var(--gold);
+        }
+
+        .footer p {
+            color: var(--fg-muted);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .footer h4 {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+        }
+
+        .footer-links a {
+            display: block;
+            color: var(--fg-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--fg);
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--gold);
+            color: var(--bg);
+            border-color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .demo-notice {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--bg);
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+        }
+
+        .footer-bottom p {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+        }
+
+        /* Mobile menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 28px;
+            height: 2px;
+            background: var(--fg);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 10, 0.98);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-nav.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .mobile-nav a {
+            font-size: 1.5rem;
+            color: var(--fg);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-nav a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .desktop-nav {
+                display: none;
+            }
+
+            .demo-banner {
+                right: -60px;
+                font-size: 0.65rem;
+            }
+        }
+
+        /* Reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <a href="#" class="font-display text-2xl font-bold">
+                Royal<span style="color: var(--gold);">Barber</span>
+            </a>
+            
+            <div class="desktop-nav flex items-center gap-8">
+                <a href="#o-nas" class="nav-link">O nas</a>
+                <a href="#uslugi" class="nav-link">Usługi</a>
+                <a href="#cennik" class="nav-link">Cennik</a>
+                <a href="#galeria" class="nav-link">Galeria</a>
+                <a href="#zespol" class="nav-link">Zespół</a>
+                <a href="#kontakt" class="nav-link">Kontakt</a>
+            </div>
+
+            <a href="#rezerwacja" class="hidden md:inline-flex items-center gap-2 px-6 py-3 border border-gold text-gold font-semibold text-sm tracking-wider uppercase transition-all duration-300 hover:bg-gold hover:text-black" style="border-color: var(--gold); color: var(--gold);">
+                Rezerwacja
+            </a>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#o-nas" class="mobile-nav-link">O nas</a>
+        <a href="#uslugi" class="mobile-nav-link">Usługi</a>
+        <a href="#cennik" class="mobile-nav-link">Cennik</a>
+        <a href="#galeria" class="mobile-nav-link">Galeria</a>
+        <a href="#zespol" class="mobile-nav-link">Zespół</a>
+        <a href="#rezerwacja" class="mobile-nav-link">Rezerwacja</a>
+        <a href="#kontakt" class="mobile-nav-link">Kontakt</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-pattern"></div>
+        
+        <div class="demo-banner">PRZYKŁADOWA STRONA</div>
+        
+        <div class="hero-content">
+            <div class="hero-badge">Est. 2015 - Kraków</div>
+            <h1 class="hero-title font-display">
+                Royal <span>Barber</span>
+            </h1>
+            <p class="hero-subtitle">Klasyka stylu. Nowoczesna precyzja.</p>
+            <a href="#rezerwacja" class="hero-cta">
+                Umów wizytę
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="line"></div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="section about-section" id="o-nas">
+        <div class="section-header reveal">
+            <span class="section-label">Poznaj nas</span>
+            <h2 class="section-title font-display">O nas</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="about-grid">
+            <div class="about-image reveal">
+                <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=80" alt="Wnętrze barbershopu">
+            </div>
+            <div class="about-content reveal">
+                <h3 class="font-display">Tradycja spotyka nowoczesność</h3>
+                <p>
+                    Royal Barber to więcej niż barbershop – to miejsce, gdzie pasja spotyka się z profesjonalizmem. 
+                    Od 2015 roku tworzymy przestrzeń, w której każdy mężczyzna może poczuć się wyjątkowo.
+                </p>
+                <p>
+                    Nasz salon znajduje się w sercu Krakowa, na zabytkowej ulicy Floriańskiej. 
+                    Łączymy klasyczne techniki strzyżenia z najnowszymi trendami, 
+                    używając wyłącznie kosmetyków premium marki Reuzel i American Crew.
+                </p>
+
+                <div class="about-features">
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>9 lat doświadczenia</h4>
+                            <p>Tysiące zadowolonych klientów</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>Kosmetyki premium</h4>
+                            <p>Tylko najlepsze marki</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>Zapierający dech klimat</h4>
+                            <p>Wnętrze w stylu premium</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4>Gwarancja satysfakcji</h4>
+                            <p>Niezadowolony? Poprawimy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section" id="uslugi">
+        <div class="section-header reveal">
+            <span class="section-label">Co oferujemy</span>
+            <h2 class="section-title font-display">Nasze usługi</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card reveal">
+                <div class="service-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 3v12"/>
+                        <circle cx="18" cy="6" r="3"/>
+                        <circle cx="6" cy="18" r="3"/>
+                        <path d="M18 9a9 9 0 0 1-9 9"/>
+                    </svg>
+                </div>
+                <h3>Strzyżenie męskie</h3>
+                <p>Klasyczne i nowoczesne strzyżenie z wykorzystaniem maszynki i nożyczek. Konsultacja, mycie głowy i stylizacja w cenie.</p>
+                <div class="price">od 70 zł</div>
+            </div>
+
+            <div class="service-card reveal">
+                <div class="service-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                        <line x1="4" y1="22" x2="4" y2="15"/>
+                    </svg>
+                </div>
+                <h3>Strzyżenie brody</h3>
+                <p>Profesjonalne modelowanie i strzyżenie brody. Kompres, olejek i stylizacja woskiem w cenie usługi.</p>
+                <div class="price">od 50 zł</div>
+            </div>
+
+            <div class="service-card reveal">
+                <div class="service-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                    </svg>
+                </div>
+                <h3>Golenie brzytwą</h3>
+                <p>Tradycyjne golenie na gorąco z użyciem profesjonalnej brzytwy. Relaksujący rytuał z kompresem.</p>
+                <div class="price">od 60 zł</div>
+            </div>
+
+            <div class="service-card reveal">
+                <div class="service-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </div>
+                <h3>Pakiet Premium</h3>
+                <p>Kompleksowa usługa: strzyżenie, broda, golenie twarzy, maska, masaż głowy i stylizacja.</p>
+                <div class="price">150 zł</div>
+            </div>
+
+            <div class="service-card reveal">
+                <div class="service-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9"/>
+                        <line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                </div>
+                <h3>Strzyżenie + Broda</h3>
+                <p>Najpopularniejszy pakiet. Pełna usługa obejmująca strzyżenie głowy i modelowanie brody.</p>
+                <div class="price">110 zł</div>
+            </div>
+
+            <div class="service-card reveal">
+                <div class="service-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <h3>Strzyżenie dzieci</h3>
+                <p>Strzyżenie dla najmłodszych dżentelmenów (do 12 lat). Bezpiecznie i z cierpliwością.</p>
+                <div class="price">50 zł</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section pricing-section" id="cennik">
+        <div class="section-header reveal">
+            <span class="section-label">Transparentność</span>
+            <h2 class="section-title font-display">Cennik</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="pricing-table reveal">
+            <div class="pricing-row">
+                <div class="service-name">
+                    Strzyżenie męskie
+                    <span>Klasyczne lub nowoczesne z myciem i stylizacją</span>
+                </div>
+                <div class="price">70 zł</div>
+            </div>
+            <div class="pricing-row">
+                <div class="service-name">
+                    Strzyżenie brody
+                    <span>Modelowanie, kompres i stylizacja woskiem</span>
+                </div>
+                <div class="price">50 zł</div>
+            </div>
+            <div class="pricing-row">
+                <div class="service-name">
+                    Strzyżenie + Broda
+                    <span>Pakiet łączący obie usługi w promocyjnej cenie</span>
+                </div>
+                <div class="price">110 zł</div>
+            </div>
+            <div class="pricing-row">
+                <div class="service-name">
+                    Golenie brzytwą
+                    <span>Tradycyjne golenie na gorąco z kompresem</span>
+                </div>
+                <div class="price">60 zł</div>
+            </div>
+            <div class="pricing-row">
+                <div class="service-name">
+                    Pakiet Premium
+                    <span>Pełny rytuał: strzyżenie, broda, golenie, maska, masaż</span>
+                </div>
+                <div class="price">150 zł</div>
+            </div>
+            <div class="pricing-row">
+                <div class="service-name">
+                    Strzyżenie dzieci (do 12 lat)
+                    <span>Bezpieczne strzyżenie dla najmłodszych</span>
+                </div>
+                <div class="price">50 zł</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="section" id="galeria">
+        <div class="section-header reveal">
+            <span class="section-label">Nasze realizacje</span>
+            <h2 class="section-title font-display">Galeria</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="gallery-grid reveal">
+            <div class="gallery-item" data-src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=1200&q=80">
+                <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&q=80" alt="Strzyżenie męskie">
+                <div class="gallery-overlay">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                        <path d="M11 8v6M8 11h6"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="gallery-item" data-src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=1200&q=80">
+                <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=600&q=80" alt="Modelowanie brody">
+                <div class="gallery-overlay">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                        <path d="M11 8v6M8 11h6"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="gallery-item" data-src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=1200&q=80">
+                <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=600&q=80" alt="Wnętrze salonu">
+                <div class="gallery-overlay">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                        <path d="M11 8v6M8 11h6"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="gallery-item" data-src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1200&q=80">
+                <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600&q=80" alt="Narzędzia barbera">
+                <div class="gallery-overlay">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                        <path d="M11 8v6M8 11h6"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="gallery-item" data-src="https://images.unsplash.com/photo-1596728325488-58c87691e9af?w=1200&q=80">
+                <img src="https://images.unsplash.com/photo-1596728325488-58c87691e9af?w=600&q=80" alt="Strzyżenie">
+                <div class="gallery-overlay">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                        <path d="M11 8v6M8 11h6"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="gallery-item" data-src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1200&q=80">
+                <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=600&q=80" alt="Salon">
+                <div class="gallery-overlay">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                        <path d="M11 8v6M8 11h6"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="gallery-item" data-src="https://images.unsplash.com/photo-1493256338651-d82f7acb2b38?w=1200&q=80">
+                <img src="https://images.unsplash.com/photo-1493256338651-d82f7acb2b38?w=600&q=80" alt="Fryzura">
+                <div class="gallery-overlay">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                        <path d="M11 8v6M8 11h6"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Zamknij">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+        </button>
+        <img src="" alt="Galeria" id="lightboxImg">
+    </div>
+
+    <!-- Testimonials -->
+    <section class="section testimonials-section" id="opinie">
+        <div class="section-header reveal">
+            <span class="section-label">Opinie</span>
+            <h2 class="section-title font-display">Co mówią nasi klienci</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="testimonials-container reveal">
+            <div class="testimonials-track" id="testimonialsTrack">
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>Najlepszy barbershop w Krakowie, bez dwóch zdań. Profesjonalne podejście, świetny klimat i zawsze perfekcyjne strzyżenie. Polecam każdemu, kto szuka jakości, a nie bylejakości.</p>
+                        <div class="testimonial-author">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80" alt="Michał" class="testimonial-avatar">
+                            <div class="testimonial-info">
+                                <h4>Michał Kowalski</h4>
+                                <div class="testimonial-stars">★★★★★</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>Chodzę tu od 3 lat i nigdy się nie zawiodłem. Panowie znają swoje rzemiosło doskonale. Broda zawsze idealnie wyrównana, a strzyżenie dokładnie tak, jak chciałem. Gorąco polecam!</p>
+                        <div class="testimonial-author">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&q=80" alt="Piotr" class="testimonial-avatar">
+                            <div class="testimonial-info">
+                                <h4>Piotr Nowak</h4>
+                                <div class="testimonial-stars">★★★★★</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>Klimat jak z filmu, obsługa na najwyższym poziomie, a ceny uczciwe. Pakiet premium to prawdziwy relaks po ciężkim tygodniu. Będę wracać regularnie!</p>
+                        <div class="testimonial-author">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&q=80" alt="Tomek" class="testimonial-avatar">
+                            <div class="testimonial-info">
+                                <h4>Tomek Wiśniewski</h4>
+                                <div class="testimonial-stars">★★★★★</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>Zdecydowanie polecam! Świetna lokalizacja w centrum Krakowa, profesjonalni barberzy i niesamowita atmosfera. Mój syn też zachwycony – to już nasze miejsce.</p>
+                        <div class="testimonial-author">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&q=80" alt="Adam" class="testimonial-avatar">
+                            <div class="testimonial-info">
+                                <h4>Adam Zieliński</h4>
+                                <div class="testimonial-stars">★★★★★</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonials-nav">
+                <button class="testimonial-dot active" data-index="0" aria-label="Opinia 1"></button>
+                <button class="testimonial-dot" data-index="1" aria-label="Opinia 2"></button>
+                <button class="testimonial-dot" data-index="2" aria-label="Opinia 3"></button>
+                <button class="testimonial-dot" data-index="3" aria-label="Opinia 4"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team -->
+    <section class="section" id="zespol">
+        <div class="section-header reveal">
+            <span class="section-label">Eksperci</span>
+            <h2 class="section-title font-display">Nasz zespół</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="team-grid">
+            <div class="team-card reveal">
+                <div class="team-image">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Bartosz Król">
+                </div>
+                <h3 class="font-display">Bartosz Król</h3>
+                <p class="role">Master Barber / Właściciel</p>
+                <p>9 lat doświadczenia. Specjalizuje się w klasycznych strzyżeniach i modelowaniu brody. Twórca koncepcji Royal Barber.</p>
+            </div>
+            <div class="team-card reveal">
+                <div class="team-image">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80" alt="Krzysztof Maj">
+                </div>
+                <h3 class="font-display">Krzysztof Maj</h3>
+                <p class="role">Senior Barber</p>
+                <p>6 lat w branży. Ekspert od fade'ów i nowoczesnych stylizacji. Jego prace można zobaczyć na Instagramie.</p>
+            </div>
+            <div class="team-card reveal">
+                <div class="team-image">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&q=80" alt="Dawid Nowak">
+                </div>
+                <h3 class="font-display">Dawid Nowak</h3>
+                <p class="role">Barber</p>
+                <p>4 lata doświadczenia. Pasjonat golenia brzytwą. Specjalizuje się w tradycyjnych rytuałach barberskich.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking -->
+    <section class="section booking-section" id="rezerwacja">
+        <div class="section-header reveal">
+            <span class="section-label">Rezerwacja</span>
+            <h2 class="section-title font-display">Umów wizytę</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="booking-container reveal">
+            <form class="booking-form" id="bookingForm">
+                <div class="form-group">
+                    <label for="name">Imię i nazwisko</label>
+                    <input type="text" id="name" name="name" placeholder="Jan Kowalski" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Numer telefonu</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+48 123 456 789" required>
+                </div>
+                <div class="form-group">
+                    <label for="service">Wybierz usługę</label>
+                    <select id="service" name="service" required>
+                        <option value="">-- Wybierz usługę --</option>
+                        <option value="strzyzenie">Strzyżenie męskie - 70 zł</option>
+                        <option value="broda">Strzyżenie brody - 50 zł</option>
+                        <option value="strzyzenie-broda">Strzyżenie + Broda - 110 zł</option>
+                        <option value="golenie">Golenie brzytwą - 60 zł</option>
+                        <option value="premium">Pakiet Premium - 150 zł</option>
+                        <option value="dzieci">Strzyżenie dzieci - 50 zł</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Preferowana data</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Dodatkowe uwagi (opcjonalnie)</label>
+                    <textarea id="message" name="message" rows="3" placeholder="Preferowana godzina, imię barbera..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Zarezerwuj wizytę</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section" id="kontakt">
+        <div class="section-header reveal">
+            <span class="section-label">Kontakt</span>
+            <h2 class="section-title font-display">Znajdź nas</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="contact-grid reveal">
+            <div>
+                <div class="contact-info-item">
+                    <div class="contact-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Adres</h4>
+                        <p>Royal Barber Kraków<br>ul. Floriańska 12<br>31-019 Kraków</p>
+                    </div>
+                </div>
+                <div class="contact-info-item">
+                    <div class="contact-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Telefon</h4>
+                        <p><a href="tel:+48123456789">+48 123 456 789</a></p>
+                    </div>
+                </div>
+                <div class="contact-info-item">
+                    <div class="contact-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Email</h4>
+                        <p><a href="mailto:kontakt@royalbarber.pl">kontakt@royalbarber.pl</a></p>
+                    </div>
+                </div>
+                <div class="contact-info-item">
+                    <div class="contact-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>Godziny otwarcia</h4>
+                        <div class="hours-list">
+                            <p>Poniedziałek – Piątek: 9:00 – 20:00</p>
+                            <p>Sobota: 9:00 – 16:00</p>
+                            <p>Niedziela: Zamknięte</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=800&q=80" alt="Wnętrze salonu" style="width: 100%; height: 100%; object-fit: cover; min-height: 400px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Map -->
+    <section class="map-container" id="mapa">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2560.1234!2d19.937!3d50.0647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47165b2c4a5d9e5f%3A0x5c2b5c5e5e5e5e5e!2sFloria%C5%84ska%2012%2C%20Krak%C3%B3w!5e0!3m2!1spl!2spl!4v1234567890" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-logo font-display">Royal<span>Barber</span></div>
+                <p>Premium barbershop w sercu Krakowa. Tradycyjne rzemiosło połączone z nowoczesnym stylem. Odwiedź nas i poczuj różnicę.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Nawigacja</h4>
+                <a href="#o-nas">O nas</a>
+                <a href="#uslugi">Usługi</a>
+                <a href="#cennik">Cennik</a>
+                <a href="#galeria">Galeria</a>
+            </div>
+            <div class="footer-links">
+                <h4>Informacje</h4>
+                <a href="#zespol">Nasz zespół</a>
+                <a href="#rezerwacja">Rezerwacja</a>
+                <a href="#kontakt">Kontakt</a>
+                <a href="#mapa">Jak dojechać</a>
+            </div>
+            <div>
+                <h4>Obserwuj nas</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link" aria-label="TikTok">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="demo-notice">TO JEST PRZYKŁADOWA STRONA DEMONSTRACYJNA</div>
+            <p>&copy; 2024 Royal Barber Kraków - Przykładowa strona demonstracyjna. Wszystkie prawa zastrzeżone.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize variables first
+        const navbar = document.getElementById('navbar');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        const testimonialsTrack = document.getElementById('testimonialsTrack');
+        const testimonialDots = document.querySelectorAll('.testimonial-dot');
+        const bookingForm = document.getElementById('bookingForm');
+
+        let currentTestimonial = 0;
+        let testimonialInterval = null;
+
+        // Navbar scroll effect
+        function handleScroll() {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Initial check
+
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+            document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close mobile menu on link click
+        mobileNavLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                mobileMenuBtn.classList.remove('active');
+                mobileNav.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Reveal animations on scroll
+        const revealElements = document.querySelectorAll('.reveal');
+
+        function checkReveal() {
+            const windowHeight = window.innerHeight;
+            revealElements.forEach(function(element) {
+                const elementTop = element.getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkReveal);
+        window.addEventListener('load', checkReveal);
+
+        // Gallery lightbox
+        galleryItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+                const src = this.getAttribute('data-src');
+                lightboxImg.src = src;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        lightboxClose.addEventListener('click', function() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Keyboard navigation for lightbox
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Testimonials carousel
+        function goToTestimonial(index) {
+            currentTestimonial = index;
+            testimonialsTrack.style.transform = 'translateX(-' + (index * 100) + '%)';
+            
+            testimonialDots.forEach(function(dot, i) {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        testimonialDots.forEach(function(dot, index) {
+            dot.addEventListener('click', function() {
+                goToTestimonial(index);
+                resetTestimonialInterval();
+            });
+        });
+
+        function autoAdvanceTestimonials() {
+            currentTestimonial = (currentTestimonial + 1) % 4;
+            goToTestimonial(currentTestimonial);
+        }
+
+        function resetTestimonialInterval() {
+            if (testimonialInterval) {
+                clearInterval(testimonialInterval);
+            }
+            testimonialInterval = setInterval(autoAdvanceTestimonials, 5000);
+        }
+
+        resetTestimonialInterval();
+
+        // Form submission
+        bookingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const service = document.getElementById('service').value;
+            const date = document.getElementById('date').value;
+            
+            alert('Dziękujemy, ' + name + '! Twoja rezerwacja na usługę "' + service + '" w dniu ' + date + ' została przyjęta. (To jest przykładowa strona - rezerwacja nie jest prawdziwa)');
+            
+            this.reset();
+        });
+
+        // Set minimum date to today
+        const dateInput = document.getElementById('date');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const target = document.querySelector(targetId);
+                if (target) {
+                    const navHeight = navbar.offsetHeight;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Respect reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        
+        if (prefersReducedMotion.matches) {
+            document.documentElement.style.scrollBehavior = 'auto';
+            if (testimonialInterval) {
+                clearInterval(testimonialInterval);
+            }
+        }
+    </script>
+</body>
+</html>
